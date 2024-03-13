@@ -4,7 +4,11 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 
-menu = ['О сайте', 'Добавить статью', 'Обратная связь', "Войти"]
+menu = [{'title': 'О сайте', 'url_name': 'about'},
+        {'title':'Добавить статью', 'url_name': 'add_page'},
+        {'title':'Обратная связь', 'url_name': 'contact'},
+        {'title': "Войти", 'url_name': 'login'},
+]
 
 data_db =[
     {'id': 1, 'title': "Анделина Джоли", 'content': 'Биография Анджелины Джоли', 'is_published': True},
@@ -15,7 +19,13 @@ data_db =[
 def index(request): #HttpRequest
     data = {'title': 'Главная страница',
             'menu': menu,
-            'posts': data_db
+            'posts': data_db,
+            # 'float': 28.56,
+            # 'lst':[1, 2, 'abc', True],
+            # 'set': {1,2,3,2,5},
+            # 'dict': {'key_1': 'value_1','key_2': 'value_2'},
+            # 'obj': MyClass(10, 20),
+            # 'url': slugify('The main page')
             }
     #t = render_to_string('women/index.html')
     #return HttpResponse(t)
@@ -25,7 +35,27 @@ def about(request):
     data = {'title': 'О сайте'}
     return render(request, 'women/about.html', context=data)
 
-def categories(request, cat_id): #HttpRequest
+
+def show_post(request, post_id):
+    return HttpResponse(f"Отображение статьи с id = {post_id}")
+
+
+def addpage(request):
+    return HttpResponse(f"Добавление статьи")
+
+
+def contact(request):
+    return HttpResponse(f"Обратная связь")
+
+
+def login(request):
+    return HttpResponse(f"Авторизация")
+
+
+def page_not_found(request, exception):
+    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+
+'''def categories(request, cat_id): #HttpRequest
     return HttpResponse(f"<h1>Статьи по категориям</h1><p>id: {cat_id}")
 def categories_by_slug(request, cat_slug): #HttpRequest
     print(request.GET)
@@ -42,6 +72,4 @@ def archive(request, year):
         #return HttpResponseRedirect('/')
         return HttpResponsePermanentRedirect(uri)
     return HttpResponse(f"<h1>Архив по годам</h1><p>year: {year}")
-
-def page_not_found(request, exception):
-    return HttpResponseNotFound("<h1>Страница не найдена</h1>")
+'''
