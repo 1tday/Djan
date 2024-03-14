@@ -32,7 +32,7 @@ def index(request): #HttpRequest
     return render(request, 'women/index.html', context=data)
 
 def about(request):
-    data = {'title': 'О сайте'}
+    data = {'title': 'О сайте', 'menu': menu}
     return render(request, 'women/about.html', context=data)
 
 
