@@ -16,6 +16,12 @@ data_db =[
     {'id': 3, 'title': "Джулия Робертс", 'content': 'Биография Джулия Робертс', 'is_published': True},
 ]
 
+cats_db = [
+    {'id': 1, 'name': 'Актрисы'},
+    {'id': 2, 'name': 'Певицы'},
+    {'id': 3, 'name': 'Спортсменки'},
+]
+
 def index(request): #HttpRequest
     data = {'title': 'Главная страница',
             'menu': menu,
@@ -50,6 +56,9 @@ def contact(request):
 
 def login(request):
     return HttpResponse(f"Авторизация")
+
+def show_category(request, cat_id):
+    return index(request)
 
 
 def page_not_found(request, exception):
