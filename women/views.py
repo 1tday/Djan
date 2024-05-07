@@ -1,8 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
+
+from women.models import Women
 
 menu = [{'title': 'О сайте', 'url_name': 'about'},
         {'title':'Добавить статью', 'url_name': 'add_page'},
@@ -23,16 +25,11 @@ cats_db = [
 ]
 
 def index(request): #HttpRequest
+    posts = Women.published.all()
     data = {'title': 'Главная страница',
             'menu': menu,
-            'posts': data_db,
+            'posts': posts,
             'cat_selected': 0,
-            # 'float': 28.56,
-            # 'lst':[1, 2, 'abc', True],
-            # 'set': {1,2,3,2,5},
-            # 'dict': {'key_1': 'value_1','key_2': 'value_2'},
-            # 'obj': MyClass(10, 20),
-            # 'url': slugify('The main page')
             }
     #t = render_to_string('women/index.html')
     #return HttpResponse(t)
@@ -43,10 +40,15 @@ def about(request):
     return render(request, 'women/about.html', context=data)
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с id = {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Women, slug=post_slug)
 
-
+    data = {'title': post.title,
+            'menu': menu,
+            'post': post,
+            'cat_selected': 1,
+    }
+    return render(request, 'women/post.html', data)
 def addpage(request):
     return HttpResponse(f"Добавление статьи")
 
